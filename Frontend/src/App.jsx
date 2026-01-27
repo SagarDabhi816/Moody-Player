@@ -8,8 +8,7 @@ import SongList from "./components/SongList";
 function App() {
   const [songs, setSongs] = useState([]);
   const [isDetecting, setIsDetecting] = useState(false);
-  const [currentMood, setcurrentMood] = useState("")
-
+  const [currentMood, setcurrentMood] = useState("");
 
   return (
     <>
@@ -22,7 +21,11 @@ function App() {
           setIsDetecting={setIsDetecting}
           setcurrentMood={setcurrentMood}
         />
-        <SongList songs={songs} isDetecting={isDetecting} currentMood={currentMood} />
+        <SongList
+          songs={songs}
+          isDetecting={isDetecting}
+          currentMood={currentMood}
+        />
       </Layout>
     </>
   );

@@ -1,9 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import * as faceapi from "face-api.js";
 import axios from "axios";
 import { toast } from "sonner";
 
-const FacialExpression = ({ setSongs, isDetecting, setIsDetecting , setcurrentMood}) => {
+const FacialExpression = ({
+  setSongs,
+  isDetecting,
+  setIsDetecting,
+  setcurrentMood,
+}) => {
   const videoRef = useRef();
   const maxVal = (expObject) => {
     let max = 0;
@@ -34,13 +39,12 @@ const FacialExpression = ({ setSongs, isDetecting, setIsDetecting , setcurrentMo
       (key) => expressions[key] === maxValue,
     );
 
-    setcurrentMood(dominantExpression)
+    setcurrentMood(dominantExpression);
     const songs = await axios.get(
       `${import.meta.env.VITE_API_BASE_URL}/songs?mood=${dominantExpression}`,
     );
     setIsDetecting(false);
     setSongs(songs.data.song);
-
   };
 
   useEffect(() => {
@@ -68,7 +72,6 @@ const FacialExpression = ({ setSongs, isDetecting, setIsDetecting , setcurrentMo
 
   return (
     <div className="w-full">
-      
       <div className="relative flex  mt-10">
         <video
           ref={videoRef}

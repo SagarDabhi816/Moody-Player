@@ -1,21 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const SongList = ({ songs, isDetecting , currentMood}) => {
+const SongList = ({ songs, isDetecting, currentMood }) => {
   const [play, setPlay] = useState(false);
-  
+
   const handlePlay = (index) => {
     play === index ? setPlay(null) : setPlay(index);
   };
 
   return (
     <div className="w-full text-gray-300">
-      <h3 className="font-bold text-[1rem] mt-4 text-center upp">Recommended Tracks : {currentMood} </h3> 
+      <h3 className="font-bold text-[1rem] mt-4 text-center upp">
+        Recommended Tracks : {currentMood}{" "}
+      </h3>
       {isDetecting ? (
         <div className="text-gray-300 text-[0.75rem] my-4">
           Getting songs for you!
         </div>
       ) : !songs || songs.length === 0 ? (
-        <div className="text-gray-300 text-[0.75rem] my-4"> Sorry ! we cant findout song according to your mood        </div>
+        <div className="text-gray-300 text-[0.75rem] my-4">
+          {" "}
+          Sorry ! we cant findout song according to your mood{" "}
+        </div>
       ) : (
         songs.map((song, idx) => (
           <div key={idx} className="my-4 w-full text-gray-400">
