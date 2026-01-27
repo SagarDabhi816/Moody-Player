@@ -3,7 +3,7 @@ import * as faceapi from "face-api.js";
 import axios from "axios";
 import { toast } from "sonner";
 
-const FacialExpression = ({ setSongs, isDetecting, setIsDetecting }) => {
+const FacialExpression = ({ setSongs, isDetecting, setIsDetecting , setcurrentMood}) => {
   const videoRef = useRef();
   const maxVal = (expObject) => {
     let max = 0;
@@ -24,21 +24,23 @@ const FacialExpression = ({ setSongs, isDetecting, setIsDetecting }) => {
         style: {
           fontFamily: "Inter",
         },
-        className: "text-[#1b1b1b]! border-red-700! rounded! shadow-sm!"
+        className: "text-[#1b1b1b]! border-red-700! rounded! shadow-sm!",
       });
       setIsDetecting(false);
     }
     const expressions = detections[0].expressions;
     const maxValue = maxVal(expressions);
     const dominantExpression = Object.keys(expressions).find(
-      (key) => expressions[key] === maxValue
+      (key) => expressions[key] === maxValue,
     );
-    console.log(dominantExpression);
-    // const songs = await axios.get(
-    //   `${import.meta.env.VITE_API_BASE_URL}/songs?mood=${dominantExpression}`
-    // );
+
+    setcurrentMood(dominantExpression)
+    const songs = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/songs?mood=${dominantExpression}`,
+    );
     setIsDetecting(false);
-    // setSongs(songs.data.songs);
+    setSongs(songs.data.song);
+
   };
 
   useEffect(() => {
@@ -52,7 +54,13 @@ const FacialExpression = ({ setSongs, isDetecting, setIsDetecting }) => {
         .then((stream) => {
           videoRef.current.srcObject = stream;
         })
-        .catch((err) => console.error("Error accessing webcam: ", err));
+        .catch((err) => {
+          setTimeout(() => {
+            toast("You Need To Enable Webcam To Detect Mood");
+          }, 1000);
+
+          console.error("Error accessing webcam: ", err);
+        });
     };
 
     loadModels().then(startVideo);
@@ -60,10 +68,8 @@ const FacialExpression = ({ setSongs, isDetecting, setIsDetecting }) => {
 
   return (
     <div className="w-full">
-      <div>
-        <h2 className="font-bold text-2xl my-4">Live Mood Detection</h2>
-      </div>
-      <div className="relative flex">
+      
+      <div className="relative flex  mt-10">
         <video
           ref={videoRef}
           autoPlay
@@ -71,16 +77,15 @@ const FacialExpression = ({ setSongs, isDetecting, setIsDetecting }) => {
           className="w-90 rounded aspect-video object-cover"
         ></video>
         <div className="flex flex-col items-start justify-start px-4 pt-2">
-          <h3 className="font-bold text-[0.9rem]">Live Mood Detection</h3>
-          <p className="text-[0.6rem] max-w-60 text-gray-500">
+          <h4 className="max-w-70 text-gray-500">
             Your current mood is being analyzed in real-time. Enjoy music
             tailored to your feelings.
-          </p>
+          </h4>
           <button
-            className={`text-white px-3 py-1 font-semibold text-[0.6rem] rounded border-none mt-4 cursor-pointer hover:bg-indigo-700 transition-colors duration-300 ${
+            className={`text-white px-3 py-1 font-semibold text-[0.6rem] rounded border-none mt-4 cursor-pointer hover:bg-green-700 transition-colors duration-300 ${
               isDetecting
-                ? "bg-indigo-600/70 disabled:cursor-not-allowed disabled:hover:bg-indigo-600/70"
-                : "bg-indigo-600"
+                ? "bg-green-600/70 disabled:cursor-not-allowed disabled:hover:bg-green-600/70"
+                : "bg-green-600"
             }`}
             onClick={detectMood}
             disabled={isDetecting}

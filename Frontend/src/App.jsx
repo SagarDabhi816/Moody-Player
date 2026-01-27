@@ -8,18 +8,21 @@ import SongList from "./components/SongList";
 function App() {
   const [songs, setSongs] = useState([]);
   const [isDetecting, setIsDetecting] = useState(false);
+  const [currentMood, setcurrentMood] = useState("")
+
 
   return (
     <>
-       <Toaster position="top-right" />
+      <Toaster position="top-right" />
       <Header />
       <Layout>
         <FacialExpression
           setSongs={setSongs}
           isDetecting={isDetecting}
           setIsDetecting={setIsDetecting}
+          setcurrentMood={setcurrentMood}
         />
-        <SongList songs={songs} isDetecting={isDetecting} />
+        <SongList songs={songs} isDetecting={isDetecting} currentMood={currentMood} />
       </Layout>
     </>
   );
